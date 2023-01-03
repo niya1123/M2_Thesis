@@ -1,0 +1,66 @@
+\documentclass{jsarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{url}
+\usepackage{enumerate}
+\usepackage{tabularx}
+
+\begin{document}
+\pagestyle{empty}
+
+%
+% 表紙
+%
+\include{cover}
+
+%
+% 概要
+%
+\include{chap0_abstract}
+
+%%% 目次 %%%
+\tableofcontents
+\newpage
+\setcounter{page}{1}
+\pagestyle{plain}
+
+%
+% 序論
+%
+\input{chap1_introduction}
+
+%
+% 使用技術
+%
+\include{chap2_technology}
+
+%
+% 研究内容
+%
+\include{chap3_research_content}
+
+%
+% 実験・考察
+%
+\include{chap4_experiment}
+
+%
+% 結論・今後の課題
+%
+\input{chap5_conclusion}
+
+%
+% 謝辞
+%
+\include{acknowledgments}
+
+%
+% 参考文献
+%
+\include{references}
+
+%
+% 付録
+%
+% \include{appendix}
+
+\end{document}

@@ -1,0 +1,54 @@
+これはBiBTeXデータベースのサンプルです。アットマーク括弧の外側は無視されるので、
+コメントはこのように記載します。
+@comment{と書いてもコメントとして中身が無視されます}
+@comment{ = の右辺は " で囲んでも中括弧で囲んでも構いません}
+本の場合は以下のようにアットマークbookを使います
+@book{kinosita,
+  author = {木下是雄},
+  title = {理科系の作文技術},
+  publisher = {中公新書(624)},
+  yomi = {Kinoshita Koreo},
+  year = {1981}
+}
+@book{suetake,
+  author = {末武国弘},
+  title = {科学論文をどう書くか},
+  publisher = {講談社ブルーバックス},
+  yomi = {Suetake Kunihiro},
+  year = 1981
+}
+@book{knuth,
+  author = {Donald E Knuth},
+  title = {The \TeX book},
+  publisher = {Addison--Wesley},
+  year = {1986},
+}
+@book{okumura,
+  author = {奥村晴彦},
+  title = {[改訂第４版] \LaTeXe 美文書作成入門},
+  publisher = {技術評論社},
+  year = {2007},
+}
+論文の場合は以下のようにアットマークarticleを使います
+@article{labelName,
+  author = {第1著者 and 第2著者},
+  title = {論文名(論文の場合のかき方)},
+  journal = {論文誌名},
+  volume = {巻番号},
+  number = {号番号},
+  pages = {31--38},
+  year = {2018}
+}
+
+Webページを参照する場合は以下のようmiscを使います。また、
+本文の方に\usepackage{url}が必要です。
+@misc{labelNameB,
+  author = {著者名},
+  title = {ページのタイトル},
+  howpublished = {http://www.kindai.ac.jp},
+  year = {発表年}
+}
+
+
+
+
