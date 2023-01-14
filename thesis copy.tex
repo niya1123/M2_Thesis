@@ -1,0 +1,116 @@
+
+
+\documentstyle[12pt,doctor,xbmkanji,epsf, graphicx,float]{master}
+% \documentstyle[12pt,doctor,xbmkanji,eclepsf]{mybook}
+% \documentstyle[12pt,doctor,gaij,epsbox]{mybook}
+\addtolength{\headsep}{1cm}
+\addtolength{\topmargin}{-2cm}
+\addtolength{\textheight}{2cm}
+
+% 以前はこうなってました
+% \addtolength{\oddsidemargin}{0.2cm}
+% \addtolength{\evensidemargin}{-2.35cm}
+% \addtolength{\textwidth}{2cm}
+
+% 指定された左2.5cm 右1.5cmぐらいの余白になる
+\addtolength{\oddsidemargin}{-1.0cm}
+\addtolength{\evensidemargin}{-3.6cm}
+\addtolength{\textwidth}{5.5cm}
+
+\begin{document}
+
+%%%%%% title and author %%%%%%
+
+% \begin{titlepage}
+% \begin{center}
+% \LARGE
+% \vspace*{1cm}
+
+% \begin{minipage}{15cm}
+% \begin{center}
+% {\gt 擬似演習者として振る舞うロボットとの\\協調演習を可能とする\\ネットワークトラブルシューティング\\演習システム}
+% \end{center}
+% \end{minipage}
+
+% \vspace*{12cm}
+% 2021年2月\\
+% \vspace*{2cm}
+% 平畑聖也\\
+% \end{center}
+% \end{titlepage}
+
+% \setlength{\baselineskip}{1.2\baselineskip}
+
+
+\input{./chapter/chap0_1_cover.tex}
+\input{./chapter/chap0_2_abstract.tex}
+\input{./chapter/chap0_3_insidecover.tex}
+
+\setlength{\baselineskip}{1.2\baselineskip}
+
+%%%%% CONTENTS %%%%%
+
+\pagestyle{plain}
+\pagenumbering{roman}
+\addcontentsline{toc}{section}{目次}
+\tableofcontents
+
+%%%%% LIST OF THESIS %%%%%
+
+% \chapter*{業績一覧}
+% \addcontentsline{toc}{section}{業績一覧}
+% \input{./WORK/work.tex}
+
+%%%%% 行頭文字下げの設定 %%%%%
+
+\parindent=1em
+
+\clearpage
+\pagestyle{headings}
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{はじめに}
+\label{chap:introduction}
+\input{./chapter/chap1_introduction.tex}
+
+
+\chapter{関連研究}
+\label{chap:related_research}
+\input{./chapter/chap2_related_research.tex}
+
+\chapter{おわりに}
+\label{chap:conclusion}
+\input{./chapter/chap8_conclusion.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% APPENDIX %%%%%
+
+% \appendix
+% \chapter{付録}
+% 
+% \input{./APP/app.tex}
+% 
+% \clearpage
+
+%%%%% REFERENCES %%%%%
+\bibliographystyle{ipsjunsr}
+\addcontentsline{toc}{chapter}{参考文献}
+\input{./chapter/bib.tex}
+
+%%%%% ACKNOWLEDGEMENT %%%%%
+\acknowledgement　% \chapter*{謝辞}
+\addcontentsline{toc}{chapter}{謝辞}
+\input{./chapter/acknowledgement.tex}
+
+%%%%% work %%%%%
+
+\chapter*{研究発表}
+\addcontentsline{toc}{chapter}{研究発表}
+\input{./chapter/work.tex}
+
+%%%%% END %%%%%
+
+\end{document}

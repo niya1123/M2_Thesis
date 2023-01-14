@@ -1,0 +1,821 @@
+%
+% "xbmkanji.sty" by 
+%		安岡孝一 <yasuoka@kanji.zinbun.kyoto-u.ac.jp>, July 22, 1997
+%	suggested from "bitmap.sty" by <hisato-h@ascii.co.jp>
+%	      and from "sprite.sty" by Martin Costabel
+%
+%	　xbmkanji.styは、ビットマップ形式のデータを漢字１文字として
+%	文中に取り込むためのスタイルです。NTT-jLaTeX、ASCII-pLaTeXの
+%	いずれでも使用可能です（ただし\delayedfontの存在でチェックし
+%	ています）が、漢字データを含んでいるため、必要ならば漢字コー
+%	ドを変換してからお使い下さい。
+%
+%	　使い方は以下の３つです。
+%
+%		\xbmkanji{xbmファイル}
+%
+%		\bdfkanji{bdfファイル}{コード番号}
+%
+%		\begin{asciibmkanji}
+%		#と-で書かれたドットパターン
+%		\end{asciibmkanji}
+%
+%	「xbmファイル」はbitmapコマンドなどで作成できるビットマップ
+%	ファイル、「bdfファイル」はX11のソースに付いてくるフォント用
+%	ビットマップファイルです。「コード番号」にはbdfフォントで参
+%	照したい文字の番号を、以下のいずれかの方法で指定します。
+%
+%	　例：jiskan24.bdfの「心」
+%		\bdfkanji{jiskan24.bdf}{16180}	% 10進
+%		\bdfkanji{jiskan24.bdf}{"3F34}	% 16進 (俗に言うJISコード)
+%		\bdfkanji{jiskan24.bdf}{31-20}  % 区点番号
+%
+%	「#と-で書かれたドットパターン」には、例えば以下のようなドッ
+%	トパターンを指定します。
+%
+%		\begin{asciibmkanji}
+%		------##--------
+%		-------##-------
+%		--------##------
+%		-----#---#------
+%		-----#----------
+%		-----#----------
+%		--#--#------##--
+%		--#--#-------##-
+%		--#--#--------#-
+%		-##--#------#-##
+%		-#---#------#--#
+%		##---#-----##---
+%		-----##----#----
+%		------######----
+%		\end{asciibmkanji}
+%
+%	なお、#の代わりに@を使ってもかまいません。
+%
+%	コマンドはいずれも「コワレモノ」ですので、\sectionや\caption
+%	の中では\protectして使って下さるようお願い致します。
+%
+%		安岡孝一＠京都大学人文科学研究所附属漢字情報研究センター
+%		    http://kanji.zinbun.kyoto-u.ac.jp/~yasuoka/
+%
+\def\@xbmspace{　}%
+\newbox\@xbmspacebox
+\newskip\@xbmwidth
+\newskip\@xbmheight
+\newcount\@asciibmcount
+\newcount\@asciibmpack
+\newcount\@asciibmwidth
+\newcount\@asciibmheight
+\@ifundefined{delayedfont}{%
+  \typeout{xbmkanji.sty for ASCII-pLaTeX by Koichi Yasuoka, July 1997.}%
+  \def\@xbmkanjistart{%
+    \ifvmode
+      \leavevmode
+    \fi
+    \hbox to 0pt{\@xbmspace\hss}%
+  }%
+  \def\@xbmkanjiend{%
+    \hbox to 0pt{\hss\@xbmspace}%
+  }%
+}{%
+  \typeout{xbmkanji.sty for NTT-jLaTeX by Koichi Yasuoka, July 1997.}%
+  \def\@xbmkanjistart{%
+    \@xbmspace
+    \setbox\@xbmspacebox=\hbox{\@xbmspace}%
+    \hskip -\wd\@xbmspacebox
+  }%
+  \def\@xbmkanjiend{%
+    \setbox\@xbmspacebox=\hbox{\@xbmspace}%
+    \hskip -\wd\@xbmspacebox
+    \@xbmspace
+  }%
+}%
+\def\@tempa{\let\iftdir=\iffalse}%
+\expandafter\ifx\csname iftdir\endcsname\relax
+  \@tempa
+\fi
+\def\@tempa{\let\if@rotsw=\iffalse}%
+\expandafter\ifx\csname if@rotsw\endcsname\relax
+  \@tempa
+\fi
+\def\@ifasciibmrotate#1#2{%
+  \iftdir
+    \if@rotsw
+      \def\@tempa{#2}%
+    \else
+      \def\@tempa{#1}%
+    \fi
+  \else
+    \if@rotsw
+      \def\@tempa{#1}%
+    \else
+      \def\@tempa{#2}%
+    \fi
+  \fi
+  \@tempa
+}%
+\begingroup
+  \catcode`#=13\relax
+  \catcode`S=13\relax
+  \catcode`+=6\relax
+  \gdef\xbmkanji+1{%
+    \ifmmode
+    \else
+      \@xbmkanjistart
+    \fi
+    \hbox to 1zw{%
+      \catcode`\#=13\relax
+      \catcode`\{=12\relax
+      \catcode`\}=12\relax
+      \def#{\@xbmkanji}%
+      \openin1 +1\relax
+      \ifeof1\relax
+	\input{+1.xbm}%
+      \else
+	\closein1\relax
+	\@@input +1\relax
+      \fi
+      \hfill
+    }%
+    \@ifnextchar\unskip{}{%
+      \@ifnextchar\\{}{%
+	\ifmmode
+	\else
+	  \@xbmkanjiend
+	\fi
+      }%
+    }%
+  }%
+  \gdef\bdfkanji+1+2{%
+    \ifmmode
+    \else
+      \@xbmkanjistart
+    \fi
+    \@bdfencode+2-.%
+    \hbox to 1zw{%
+      \catcode`\S=13\relax
+      \defS{\catcode`\S=11\@bdfkanji}%
+      \openin1 +1\relax
+      \ifeof1\relax
+        \input{+1.bdf}%
+      \else
+        \closein1\relax
+        \@@input +1\relax
+      \fi
+      \hfill
+    }%
+    \@ifnextchar\unskip{}{%
+      \@ifnextchar\\{}{%
+	\ifmmode
+	\else
+	  \@xbmkanjiend
+	\fi
+      }%
+    }%
+  }%
+  \gdef\asciibmkanji{%
+    \ifmmode
+    \else
+      \@xbmkanjistart
+    \fi
+    \hbox to 1zw\bgroup
+      \def\@asciibmpattern{}%
+      \let\@asciibmlastpattern=\relax
+      \def\@asciibmallpattern{}%
+      \@asciibmwidth=0\relax
+      \@asciibmheight=0\relax
+      \@tempcntb=0\relax
+      \catcode`\#=12\relax
+      \@asciibmkanji 
+  }%
+\endgroup
+\long\def\@xbmkanji#1idth #2 #3eight #4 #5={%
+  \@xbmwidth=1zw\relax
+  \@xbmheight=0.912zh\relax
+  \divide\@xbmwidth by #2\relax
+  \divide\@xbmheight by #4\relax
+  \@asciibmwidth=#2\relax
+  \advance\@asciibmwidth by 7\relax
+  \divide\@asciibmwidth by 8\relax
+  \@asciibmheight=#4\relax
+  \@ifasciibmrotate{%
+    \@tempskipa=0.1zh\relax
+    \@tempskipb=0.5zw\relax
+  }{%
+    \@tempskipa=0.8zh\relax
+  }%
+  \def\@asciibmpattern{}%
+  \let\@asciibmlastpattern=\relax
+  \def\@asciibmallpattern{}%
+  \@asciibmcount=0\relax
+  \@tempcnta=\@asciibmwidth
+  \@xbmonebyte
+}%
+\def\@xbmonebyte#1x#2#3{%
+  \@xbmhalfbyte#3%
+  \@xbmhalfbyte#2%
+  \advance\@tempcnta by -1\relax
+  \ifnum\@tempcnta>0\relax
+    \let\@tempa=\@xbmonebyte
+  \else
+    \ifnum\@asciibmcount>0\relax
+      \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,}%
+    \fi
+    \ifx\@asciibmlastpattern\relax
+      \let\@asciibmlastpattern=\@asciibmpattern
+      \@asciibmpack=1\relax
+    \else
+      \ifx\@asciibmpattern\@asciibmlastpattern
+	\advance\@asciibmpack by 1\relax
+      \else
+	\edef\@asciibmallpattern{\@asciibmallpattern h\the\@asciibmpack,%
+	  \@asciibmlastpattern p,}%
+	\let\@asciibmlastpattern=\@asciibmpattern
+	\@asciibmpack=1\relax
+      \fi
+    \fi
+    \advance\@asciibmheight by -1\relax
+    \ifnum\@asciibmheight>0\relax
+      \def\@asciibmpattern{}%
+      \@asciibmcount=0\relax
+      \@tempcnta=\@asciibmwidth
+      \let\@tempa=\@xbmonebyte
+    \else
+      \edef\@asciibmallpattern{\@asciibmallpattern h\the\@asciibmpack,%
+	\@asciibmlastpattern}%
+      \let\@tempa=\@xbmendline
+    \fi
+  \fi
+  \@tempa
+}%
+\def\@xbmendline#1;{%
+  \@ifasciibmrotate{%
+    \vrule height \@tempskipb depth \@tempskipb width 0pt\relax
+    \raise-\@tempskipb\hbox to 0pt\bgroup
+      \hskip\@tempskipa
+      \vbox to 0pt\bgroup
+	\global\@asciibmpack=1\relax
+	\@asciibmcount=0\relax
+	\expandafter\@asciibmtwrite\@asciibmallpattern e,%
+      \egroup
+      \hss
+    \egroup
+  }{%
+    \raise\@tempskipa\hbox to 0pt\bgroup
+      \global\@asciibmpack=1\relax
+      \expandafter\@asciibmwrite\@asciibmallpattern e,%
+    \egroup
+  }%
+  \hfill
+}%
+\def\@xbmhalfbyte#1{%
+  \if#1f%
+    \ifnum\@asciibmcount<0\relax
+      \multiply\@asciibmcount by -1\relax
+      \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,}%
+      \@asciibmcount=4\relax
+    \else
+      \advance\@asciibmcount by 4\relax
+    \fi
+  \else
+    \if#1e%
+      \ifnum\@asciibmcount>0\relax
+	\edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,s1,}%
+      \else
+	\advance\@asciibmcount by -1\relax
+	\multiply\@asciibmcount by -1\relax
+	\edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,}%
+      \fi
+      \@asciibmcount=3\relax
+    \else
+      \if#1d%
+	\ifnum\@asciibmcount<0\relax
+	  \multiply\@asciibmcount by -1\relax
+	  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,d1,s1,}%
+	\else
+	  \advance\@asciibmcount by 1\relax
+	  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,s1,}%
+	\fi
+	\@asciibmcount=2\relax
+      \else
+	\if#1c%
+	  \ifnum\@asciibmcount>0\relax
+	    \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,s2,}%
+	  \else
+	    \advance\@asciibmcount by -2\relax
+	    \multiply\@asciibmcount by -1\relax
+	    \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,}%
+	  \fi
+	  \@asciibmcount=2\relax
+	\else
+	  \if#1b%
+	    \ifnum\@asciibmcount<0\relax
+	      \multiply\@asciibmcount by -1\relax
+	      \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		d2,s1,}%
+	    \else
+	      \advance\@asciibmcount by 2\relax
+	      \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,s1,}%
+	    \fi
+	    \@asciibmcount=1\relax
+	  \else
+	    \if#1a%
+	      \ifnum\@asciibmcount>0\relax
+		\edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,%
+		  s1,d1,s1,}%
+	      \else
+		\advance\@asciibmcount by -1\relax
+		\multiply\@asciibmcount by -1\relax
+		\edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		  d1,s1,}%
+	      \fi
+	      \@asciibmcount=1\relax
+	    \else
+	      \ifcase#1\relax
+		\ifnum\@asciibmcount>0\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,}%
+		  \@asciibmcount=-4\relax
+		\else
+		  \advance\@asciibmcount by -4\relax
+		\fi
+	      \or
+		\ifnum\@asciibmcount<0\relax
+		  \multiply\@asciibmcount by -1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		    d1,}%
+		\else
+		  \advance\@asciibmcount by 1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,}%
+		\fi
+		\@asciibmcount=-3\relax
+	      \or
+		\ifnum\@asciibmcount>0\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,%
+		    s1,d1,}%
+		\else
+		  \advance\@asciibmcount by -1\relax
+		  \multiply\@asciibmcount by -1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		    d1,}%
+		\fi
+		\@asciibmcount=-2\relax
+	      \or
+		\ifnum\@asciibmcount<0\relax
+		  \multiply\@asciibmcount by -1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		    d2,}%
+		\else
+		  \advance\@asciibmcount by 2\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,}%
+		\fi
+		\@asciibmcount=-2\relax
+	      \or
+		\ifnum\@asciibmcount>0\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,%
+		    s2,d1,}%
+		\else
+		  \advance\@asciibmcount by -2\relax
+		  \multiply\@asciibmcount by -1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		    d1,}%
+		\fi
+		\@asciibmcount=-1\relax
+	      \or
+		\ifnum\@asciibmcount<0\relax
+		  \multiply\@asciibmcount by -1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		    d1,s1,d1,}%
+		\else
+		  \advance\@asciibmcount by 1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,%
+		    s1,d1,}%
+		\fi
+		\@asciibmcount=-1\relax
+	      \or
+		\ifnum\@asciibmcount>0\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,%
+		    s1,d2,}%
+		\else
+		  \advance\@asciibmcount by -1\relax
+		  \multiply\@asciibmcount by -1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		    d2,}%
+		\fi
+		\@asciibmcount=-1\relax
+	      \or
+		\ifnum\@asciibmcount<0\relax
+		  \multiply\@asciibmcount by -1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		    d3,}%
+		\else
+		  \advance\@asciibmcount by 3\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,}%
+		\fi
+		\@asciibmcount=-1\relax
+	      \or
+		\ifnum\@asciibmcount>0\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,%
+		    s3,}%
+		\else
+		  \advance\@asciibmcount by -3\relax
+		  \multiply\@asciibmcount by -1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,}%
+		\fi
+		\@asciibmcount=1\relax
+	      \or
+		\ifnum\@asciibmcount<0\relax
+		  \multiply\@asciibmcount by -1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern s\the\@asciibmcount,%
+		    d1,s2,}%
+		\else
+		  \advance\@asciibmcount by 1\relax
+		  \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,%
+		    s2,}%
+		\fi
+		\@asciibmcount=1\relax
+	      \fi
+	    \fi
+	  \fi
+	\fi
+      \fi
+    \fi
+  \fi
+}%
+\def\@bdfkanji#1 ENCODING #2 {%
+  \ifnum#2=\@tempcnta
+    \let\@tempa=\@bdfbbx
+  \else
+    \let\@tempa=\@bdfkanji
+  \fi
+  \@tempa
+}%
+\def\@bdfbbx#1 BBX #2 #3 #4 BITMAP {%
+  \@xbmwidth=1zw\relax
+  \@xbmheight=0.912zh\relax
+  \divide\@xbmwidth by #2\relax
+  \divide\@xbmheight by #3\relax
+  \@tempcnta=#3\relax
+  \@ifasciibmrotate{%
+    \@tempskipa=0.1zh\relax
+    \@tempskipb=0.5zw\relax
+  }{%
+    \@tempskipa=0.8zh\relax
+  }%
+  \def\@asciibmpattern{}%
+  \let\@asciibmlastpattern=\relax
+  \def\@asciibmallpattern{}%
+  \@asciibmcount=0\relax
+  \@bdfoneline
+}%
+\def\@bdfoneline#1 {%
+  \@bdfhalfbyte#1.%
+  \ifnum\@asciibmcount>0\relax
+    \edef\@asciibmpattern{\@asciibmpattern d\the\@asciibmcount,}%
+  \fi
+  \ifx\@asciibmlastpattern\relax
+    \let\@asciibmlastpattern=\@asciibmpattern
+    \@asciibmpack=1\relax
+  \else
+    \ifx\@asciibmpattern\@asciibmlastpattern
+      \advance\@asciibmpack by 1\relax
+    \else
+      \edef\@asciibmallpattern{\@asciibmallpattern h\the\@asciibmpack,%
+	\@asciibmlastpattern p,}%
+      \let\@asciibmlastpattern=\@asciibmpattern
+      \@asciibmpack=1\relax
+    \fi
+  \fi
+  \advance\@tempcnta by -1\relax
+  \ifnum\@tempcnta>0\relax
+    \def\@asciibmpattern{}%
+    \@asciibmcount=0\relax
+    \let\@tempa=\@bdfoneline
+  \else
+    \edef\@asciibmallpattern{\@asciibmallpattern h\the\@asciibmpack,%
+      \@asciibmlastpattern}%
+    \let\@tempa=\@bdfendfont
+  \fi
+  \@tempa
+}%
+\def\@bdfhalfbyte#1{%
+  \if#1.%
+    \let\@tempa=\relax
+  \else
+    \let\@tempa=\@bdfhalfbyte
+    \if#1a%
+      \@xbmhalfbyte5%
+    \else
+      \if#1A%
+	\@xbmhalfbyte5%
+      \else
+	\if#1b%
+	  \@xbmhalfbyte{d}%
+	\else
+	  \if#1B%
+	    \@xbmhalfbyte{d}%
+	  \else
+	    \if#1c%
+	      \@xbmhalfbyte3%
+	    \else
+	      \if#1C%
+		\@xbmhalfbyte3%
+	      \else
+		\if#1d%
+		  \@xbmhalfbyte{b}%
+		\else
+		  \if#1D%
+		    \@xbmhalfbyte{b}%
+		  \else
+		    \if#1e%
+		      \@xbmhalfbyte7%
+		    \else
+		      \if#1E%
+			\@xbmhalfbyte7%
+		      \else
+			\if#1f%
+			  \@xbmhalfbyte{f}%
+			\else
+			  \if#1F%
+			    \@xbmhalfbyte{f}%
+			  \else
+			    \ifcase#1\relax
+			      \@xbmhalfbyte0%
+			    \or
+			      \@xbmhalfbyte8%
+			    \or
+			      \@xbmhalfbyte4%
+			    \or
+			      \@xbmhalfbyte{c}%
+			    \or
+			      \@xbmhalfbyte2%
+			    \or
+			      \@xbmhalfbyte{a}%
+			    \or
+			      \@xbmhalfbyte6%
+			    \or
+			      \@xbmhalfbyte{e}%
+			    \or
+			      \@xbmhalfbyte1%
+			    \or
+			      \@xbmhalfbyte9%
+			    \fi
+			  \fi
+			\fi
+		      \fi
+		    \fi
+		  \fi
+		\fi
+	      \fi
+	    \fi
+	  \fi
+	\fi
+      \fi
+    \fi
+  \fi
+  \@tempa
+}%
+\def\@bdfendfont#1ENDCHAR{%
+  \endinput
+  \@ifasciibmrotate{%
+    \vrule height \@tempskipb depth \@tempskipb width 0pt\relax
+    \raise-\@tempskipb\hbox to 0pt\bgroup
+      \hskip\@tempskipa
+      \vbox to 0pt\bgroup
+	\global\@asciibmpack=1\relax
+	\@asciibmcount=0\relax
+	\expandafter\@asciibmtwrite\@asciibmallpattern e,%
+      \egroup
+      \hss
+    \egroup
+  }{%
+    \raise\@tempskipa\hbox to 0pt\bgroup
+      \global\@asciibmpack=1\relax
+      \expandafter\@asciibmwrite\@asciibmallpattern e,%
+    \egroup
+  }%
+  \hfill
+}%
+\def\@bdfencode#1-#2.{%
+  \if.#2.%
+    \@tempcnta=#1\relax
+  \else
+    \@bdfencoder#1-#2.%
+  \fi
+}%
+\def\@bdfencoder#1-#2-.{%
+  \@tempcnta=#1\relax
+  \multiply\@tempcnta by 256\relax
+  \advance\@tempcnta by #2\relax
+  \advance\@tempcnta by 8224\relax
+}%
+\def\@asciibmkanji#1{%
+  \ifnum\@tempcntb>\@asciibmwidth
+    \@asciibmwidth=\@tempcntb
+  \fi
+  \ifx#1\end
+    \edef\@asciibmallpattern{\@asciibmallpattern h\the\@asciibmpack,%
+      \@asciibmlastpattern}%
+    \let\@tempa=\end
+  \else
+    \advance\@asciibmheight by 1\relax
+    \@tempcnta=1\relax
+    \@tempcntb=1\relax
+    \ifx#1-%
+      \let\@tempa=\@asciibmskips
+    \else
+      \let\@tempa=\@asciibmdots
+    \fi
+  \fi
+  \@tempa
+}%
+\def\@asciibmskips#1#2 {%
+  \advance\@tempcntb by 1\relax
+  \if#1-%
+    \advance\@tempcnta by 1\relax
+    \if!#2!%
+      \ifx\@asciibmlastpattern\relax
+	\let\@asciibmlastpattern=\@asciibmpattern
+	\@asciibmpack=1\relax
+      \else
+	\ifx\@asciibmpattern\@asciibmlastpattern
+	  \advance\@asciibmpack by 1\relax
+	\else
+	  \edef\@asciibmallpattern{\@asciibmallpattern h\the\@asciibmpack,%
+	    \@asciibmlastpattern p,}%
+	  \let\@asciibmlastpattern=\@asciibmpattern
+	  \@asciibmpack=1\relax
+	\fi
+      \fi
+      \def\@asciibmpattern{}%
+      \let\@tempa=\@asciibmkanji
+    \else
+      \def\@tempa{\@asciibmskips#2 }%
+    \fi
+  \else
+    \if!#2!%
+      \edef\@asciibmpattern{\@asciibmpattern s\the\@tempcnta,d1,}%
+      \ifx\@asciibmlastpattern\relax
+	\let\@asciibmlastpattern=\@asciibmpattern
+	\@asciibmpack=1\relax
+      \else
+	\ifx\@asciibmpattern\@asciibmlastpattern
+	  \advance\@asciibmpack by 1\relax
+	\else
+	  \edef\@asciibmallpattern{\@asciibmallpattern h\the\@asciibmpack,%
+	    \@asciibmlastpattern p,}%
+	  \let\@asciibmlastpattern=\@asciibmpattern
+	  \@asciibmpack=1\relax
+	\fi
+      \fi
+      \def\@asciibmpattern{}%
+      \let\@tempa=\@asciibmkanji
+    \else
+      \edef\@asciibmpattern{\@asciibmpattern s\the\@tempcnta,}%
+      \@tempcnta=1
+      \def\@tempa{\@asciibmdots#2 }%
+    \fi
+  \fi
+  \@tempa
+}%
+\def\@asciibmdots#1#2 {%
+  \advance\@tempcntb by 1\relax
+  \if#1-%
+    \if!#2!%
+      \edef\@asciibmpattern{\@asciibmpattern d\the\@tempcnta,}%
+      \ifx\@asciibmlastpattern\relax
+	\let\@asciibmlastpattern=\@asciibmpattern
+	\@asciibmpack=1\relax
+      \else
+	\ifx\@asciibmpattern\@asciibmlastpattern
+	  \advance\@asciibmpack by 1\relax
+	\else
+	  \edef\@asciibmallpattern{\@asciibmallpattern h\the\@asciibmpack,%
+	    \@asciibmlastpattern p,}%
+	  \let\@asciibmlastpattern=\@asciibmpattern
+	  \@asciibmpack=1\relax
+	\fi
+      \fi
+      \def\@asciibmpattern{}%
+      \let\@tempa=\@asciibmkanji
+    \else
+      \edef\@asciibmpattern{\@asciibmpattern d\the\@tempcnta,}%
+      \@tempcnta=1
+      \def\@tempa{\@asciibmskips#2 }%
+    \fi
+  \else
+    \advance\@tempcnta by 1\relax
+    \if!#2!%
+      \edef\@asciibmpattern{\@asciibmpattern d\the\@tempcnta,}%
+      \ifx\@asciibmlastpattern\relax
+	\let\@asciibmlastpattern=\@asciibmpattern
+	\@asciibmpack=1\relax
+      \else
+	\ifx\@asciibmpattern\@asciibmlastpattern
+	  \advance\@asciibmpack by 1\relax
+	\else
+	  \edef\@asciibmallpattern{\@asciibmallpattern h\the\@asciibmpack,%
+	    \@asciibmlastpattern p,}%
+	  \let\@asciibmlastpattern=\@asciibmpattern
+	  \@asciibmpack=1\relax
+	\fi
+      \fi
+      \def\@asciibmpattern{}%
+      \let\@tempa=\@asciibmkanji
+    \else
+      \def\@tempa{\@asciibmdots#2 }%
+    \fi
+  \fi
+  \@tempa
+}%
+\def\endasciibmkanji{%
+    \@xbmwidth=1zw\relax
+    \@xbmheight=0.912zh\relax
+    \divide\@xbmwidth by \@asciibmwidth
+    \divide\@xbmheight by \@asciibmheight
+    \@ifasciibmrotate{%
+      \@tempskipa=0.1zh\relax
+      \@tempskipb=0.5zw\relax
+      \vrule height \@tempskipb depth \@tempskipb width 0pt\relax
+      \raise-\@tempskipb\hbox to 0pt\bgroup
+	\hskip\@tempskipa
+	\vbox to 0pt\bgroup
+	  \global\@asciibmpack=1\relax
+	  \@asciibmcount=0\relax
+	  \expandafter\@asciibmtwrite\@asciibmallpattern e,%
+	\egroup
+	\hss
+      \egroup
+    }{%
+      \@tempskipa=0.8zh\relax
+      \raise\@tempskipa\hbox to 0pt\bgroup
+	\global\@asciibmpack=1\relax
+	\expandafter\@asciibmwrite\@asciibmallpattern e,%
+      \egroup
+    }%
+    \hfill
+  \egroup
+}%
+\def\@asciibmwrite#1#2,{%
+  \if#1e%
+    \let\@tempa=\hss
+  \else
+    \let\@tempa=\@asciibmwrite
+    \if#1d%
+      \vrule height 0pt depth \@asciibmpack\@xbmheight width #2\@xbmwidth
+    \else
+      \if#1s%
+	\hskip #2\@xbmwidth
+      \else
+	\if#1h%
+	  \global\@asciibmpack=#2\relax
+	\else
+	  \def\@tempa{%
+	    \hss
+	    \egroup
+	    \advance\@tempskipa by -\@asciibmpack\@xbmheight
+	    \raise\@tempskipa\hbox to 0pt\bgroup
+	    \global\@asciibmpack=1\relax
+	    \@asciibmwrite
+	  }%
+	\fi
+      \fi
+    \fi
+  \fi
+  \@tempa
+}%
+\def\@asciibmtwrite#1#2,{%
+  \if#1e%
+    \let\@tempa=\vfill
+  \else
+    \let\@tempa=\@asciibmtwrite
+    \if#1d%
+      \advance\@asciibmcount by #2\relax
+      \vskip -\@asciibmcount\@xbmwidth
+      \hrule height 0pt depth #2\@xbmwidth width \@asciibmpack\@xbmheight
+      \@asciibmcount=#2\relax
+    \else
+      \if#1s%
+	\advance\@asciibmcount by #2\relax
+      \else
+	\if#1h%
+	  \global\@asciibmpack=#2\relax
+	\else
+	  \def\@tempa{%
+	    \vss
+	    \egroup
+	    \hss
+	    \egroup
+	    \advance\@tempskipa by \@asciibmpack\@xbmheight
+	    \raise-\@tempskipb\hbox to 0pt\bgroup
+	    \hskip\@tempskipa
+	    \vbox to 0pt\bgroup
+	    \global\@asciibmpack=1\relax
+	    \@asciibmcount=0\relax
+	    \@asciibmtwrite
+	  }%
+	\fi
+      \fi
+    \fi
+  \fi
+  \@tempa
+}%

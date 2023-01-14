@@ -1,0 +1,40 @@
+%
+% chapter centering, 1-Aug-1991, K.Kita
+%
+\def\@makechapterhead#1{ \vspace*{20pt} { \parindent 0pt \centering
+% \ifnum \c@secnumdepth >\m@ne \huge\bf \@chapapp{} \thechapter \par
+ \ifnum \c@secnumdepth >\m@ne \huge\bf 第 \thechapter 章 \par
+ \vskip 20pt \fi \Huge \gt \bf #1\par
+ \nobreak \vskip 40pt\rule[.5ex]{\textwidth}{1mm}\par
+ \nobreak \vskip 10pt}
+ }
+
+\def\@makeschapterhead#1{ \vspace*{20pt} { \parindent 0pt \centering
+ \Huge \gt \bf #1\par
+ \nobreak \vskip 40pt }
+ }
+
+
+%\def\@listI{\leftmargin\leftmargini
+% \partopsep 0pt \parsep 0pt \topsep 0pt \itemsep 0pt \relax}
+% \let\@listi\@listI \@listi
+%\def\@listii{\leftmargin\leftmarginii
+% \labelwidth\leftmarginii\advance\labelwidth-\labelsep
+% \topsep 0pt \parsep 0pt \itemsep 0pt}
+
+\long\def\@makecaption#1#2{
+ \vskip 10pt
+ \setbox\@tempboxa\hbox{#1 #2}
+ \ifdim \wd\@tempboxa >\hsize \unhbox\@tempboxa\par \else \hbox
+to\hsize{\hfil\box\@tempboxa\hfil}\fi}
+\def\fnum@table{{\bf 表 \thetable }\hspace*{1ex}}
+\def\fnum@figure{{\bf 図 \thefigure }\hspace*{1ex}}
+% \def\fnum@table{{\bf Table \thetable }\hspace*{1ex}}
+% \def\fnum@figure{{\bf Fig. \thefigure }\hspace*{1ex}}
+
+\def\paragraph{\@startsection{paragraph}{4}
+ {\z@}{1ex}{-0.01ex}{\normalsize\bf}}
+
+%%
+\def\acknowledgement{\chapter*{謝辞\@mkboth
+ {謝辞}{謝辞}}}
