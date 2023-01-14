@@ -6,7 +6,7 @@ docker exec -it latex platex thesis.tex
 docker exec -it latex platex thesis.tex
 docker exec -it latex platex thesis.tex
 docker exec -it latex dvipdfmx thesis.dvi
-docker rm latex
+# docker rm -f latex
 rm *.aux
 rm *.dvi
 rm *.log
