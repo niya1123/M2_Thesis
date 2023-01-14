@@ -33,73 +33,104 @@
 %
 \input{chap0_insidecover}
 
+\setlength{\baselineskip}{1.2\baselineskip}
+
 %%% 目次 %%%
-\tableofcontents
-\newpage
-\setcounter{page}{1}
 \pagestyle{plain}
+\pagenumbering{roman}
+\addcontentsline{toc}{section}{目次}
+\tableofcontents
+
+%%%%% 行頭文字下げの設定 %%%%%
+
+\parindent=1em
+
+\clearpage
+\pagestyle{headings}
+\pagenumbering{arabic}
 
 %
 % 序論
 %
-\chapter{序論}\label{chap:introduction}
+\chapter{序論}
+\label{chap:introduction}
 \input{chap1_introduction}
 
 %
 % コンセプトマップ 
 %
-\chapter{コンセプトマップ}\label{chap:conceptmap}
+\chapter{コンセプトマップ}
+\label{chap:conceptmap}
 \include{chap2_conceptmap}
 
 %
 % キットビルド概念マップ
 %
-\chapter{キットビルド概念マップ}\label{chap:kitbuild}
+\chapter{キットビルド概念マップ}
+\label{chap:kitbuild}
 \include{chap3_kitbuild}
 
 %
 % 関連研究
 %
-\chapter{関連研究}\label{chap:refer}
+\chapter{関連研究}
+\label{chap:refer}
 \include{chap4_refer}
 
 %
 % システム要件
 %
-\chapter{システム要件}\label{chap:content}
+\chapter{システム要件}
+\label{chap:content}
 \input{chap5_content}
 
 %
 % 学習者理解度可視化システム
 %
-\chapter{学習者理解度可視化システム}\label{chap:system}
+\chapter{学習者理解度可視化システム}
+\label{chap:system}
 \input{chap6_system}
 
 %
 % 評価実験
 %
-\chapter{評価実験}\label{chap:experiment}
+\chapter{評価実験}
+\label{chap:experiment}
 \input{chap7_experiment}
 
 %
 % 結論
 %
-\chapter{結論}\label{chap:conclusion}
+\chapter{結論}
+\label{chap:conclusion}
 \input{chap8_conclusion}
 
 %
 % 謝辞
 %
+\acknowledgement　% \chapter*{謝辞}
+\addcontentsline{toc}{chapter}{謝辞}
 \include{acknowledgments}
 
 %
 % 参考文献
 %
+\chapter*{参考文献}
+\addcontentsline{toc}{chapter}{参考文献}
 \include{references}
+
+%
+% 研究発表
+%
+\chapter*{研究発表}
+\addcontentsline{toc}{chapter}{研究発表}
+\input{work.tex}
 
 %
 % 付録
 %
+\chapter*{付録}
+\addcontentsline{toc}{chapter}{付録}
 \include{appendix}
 
 \end{document}
