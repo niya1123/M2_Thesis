@@ -39,6 +39,13 @@
 \newpage
 
 \subsection{グラフデータ入力補助機能}\label{subsec:hojo}
+グラフデータ入力補助機能は，クライアントでJSON形式のグラフデータを入力補助する機能である．
+この機能は指導者が用いる機能で，新規にグラフデータを入力する場合に用いる．
+グラフデータは，最低でも属性，親ノード，子ノードの一セットを入力する必要がある．
+そのためテキストベースの従来のデータ入力フォームでは，関係性など誤って入力する可能性がある．
+そこで本機能では入力フォームを階層構造で入力可能なUIとして提供し，入力誤りを減らすようにしている．
+また，本入力フォームはドラック＆ドロップや編集メニューを用い，入力データを階層表示し操作できる．
+これにより，指導者は関係性を整理しながらグラフデータを入力することが可能である．
 
 グラフデータ入力補助機能のGUIを図\ref{fig:hojo}に示す．
 
@@ -53,7 +60,7 @@
 図\ref{fig:hojo}は初期状態で，図のような木構造な入力フォームを提示する．
 初期属性とは第\ref{chap:conceptmap}章の図\ref{fig:example_concept}で示した植物に該当する．
 初期親ノードは被子植物，初期子ノードはサクラに該当する．
-
+\newpage
 各々の階層は図\ref{fig:hojo_change_name}のようにして各ノードを右クリックすることによりメニューが表示される．
 
 \begin{figure}[htbp]
@@ -64,4 +71,18 @@
 \label{fig:hojo_change_name}
 \end{figure}
 
+\newpage
+メニューはCreate, Rename, Delete, Editの四種類あり，それぞれノードの新規作成，ノードの名前変更，ノードの削除，ノードの編集を意味する．
+Editについては，図\ref{fig:hojo_edit}のようにして，Cut, Copy, Pasteが存在し，それぞれノードの切り取り，ノードのコピー，ノードの貼り付けが可能である．
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=9cm]{img/hojo_edit.eps}
+\end{center}
+\caption{グラフデータ入力補助機能 Editについて}
+\label{fig:hojo_edit}
+\end{figure}
+
+これらの機能を指導者は用いてコンセプトマップのデータをグラフデータとしてグラフデータベースに登録できる．
+\newpage
 \subsection{グラフデータ可視化機能}\label{subsec:kasi}
