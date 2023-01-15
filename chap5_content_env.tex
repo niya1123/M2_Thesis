@@ -14,3 +14,18 @@
     - 本システムに何か変更を加えた際にコンテナに残っているキャッシュを削除するためのコマンド
     
 \end{itemize}
+
+本システムのコンテナ内にて利用しているソフトウェアを以下の表\ref{tab:docker_software}に示す．
+\begin{table}[htb]
+    \centering
+    \caption{コンテナ内に導入しているソフトウェア}
+    \label{tab:docker_software}
+    \begin{tabular}{|c|c|}  \hline
+        OS & Ubuntu 18.04 \\ \hline
+		Webサーバソフトウェア & Flask 2.1.2 \\ \hline
+		\multirow{2}{*}{サーバサイド言語} & Django 3.0.2 \\
+		              & Python 3.8 \\ \hline
+		グラフデータベース & Neo4j 4.4.3 \\ \hline		  
+    \end{tabular}
+\end{table}
+\newpage
