@@ -1,0 +1,31 @@
+\section{本章の概要}
+本章では，学習者理解度可視化システムとしてのシステムにおける具体的な実行手順と，それぞれの機能についての詳細について述べる．
+
+\section{システム実行手順の流れ}
+\subsection{前提条件}
+本システムを実行する前に満たすべき前提条件を示す．
+まず，本システムは全てDocker上で動作するため，Dockerを使用できるPC上でのみ動作する．
+そのPCの必要最低動作環境を表\ref{tab:docker_env}に示す．
+
+\begin{table}[htb]
+    \centering
+    \caption{Dockerのシステム要件}
+    \label{tab:docker_env}
+    \begin{tabular}{|c|c|}  \hline
+        \multirow{5}{*}{Windows} & Windows 10 64 ビット：Pro、Enterprise、Education(ビルド 15063 以上) \\
+		              & Hyper-V と Windows コンテナ機能の有効化 \\ 
+                      & 64 ビット SLAT (Second Level Address Translation) 対応プロセッサ \\ 
+                      & 4GB システムメモリ \\ 
+                      & BIOS レベルでのハードウェア仮想化の有効化 \\ \hline
+        \multirow{2}{*}{Intel チップの Mac} & macOS はバージョン 10.15 またはそれ以降 \\
+        & 最小 4GB の メモリ RAM \\ \hline
+        Apple silicon の Mac & Rosetta 2 のインストール \\ \hline
+        \multirow{7}{*}{Linux系} & 仮想化のために、 64-bit カーネルと CPU のサポート \\
+        & KVM 仮想化のサポート \\ 
+        & QEMUバージョン5.2以上 \\
+        & systemd init システム \\ 
+        & Gnome または KDE デスクトップ環境 \\ 
+        & 最小 4GB の メモリ RAM \\
+        & ユーザ名前空間で ID マッピングの設定を有効化 \\ \hline
+    \end{tabular}
+\end{table}
