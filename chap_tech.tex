@@ -10,6 +10,32 @@
 Docker\cite{docker}は，Docker社が開発してるコンテナ仮想化を用いてアプリケーションの開発や実行をするためのオープンプラットフォームである．コンテナ仮想化とは，ホストOSのカーネルを利用してプロセスやユーザを隔離して動かすことで開発環境や実行環境を構築するためのものである．ハイバーバイザを利用した仮想化ソフトウェアとは違い，ハードウェアを仮想化しないため軽量で高速に起動や停止することが可能である．
 
 本システムでは，Dockerを利用してWebアプリケーションを構築している．このため，実運用されているPC環境に影響を及ぼさずに本システムが利用可能となっている．またDockerイメージの共有をすることで特定のOS依存することなく本システムの可能となっている．
+また，本システムではDockerを利用するためにComposeというものを用いている．
+Composeとは，複数のコンテナを定義し実行するDockerアプリケーションの為のツールである．
+ComposeにおいてはYAML\cite{YAML}ファイルを使ってアプリケーションサービスの設定を行う．
+コマンド一つ実行するだけで，設定内容に基づいたアプリケーションの生成，起動を行う．
+
+Composeを使うには基本的に3つのステップを踏む．
+
+\begin{enumerate}
+    \item アプリケーション環境をDockerfileに定義する．
+    \item アプリケーションを構成するサービスをdocker-compose.ymlファイル内に定義する．
+    \item docker-compose upを実行したら，Composeはアプリケーション全体を起動・実行する．
+\end{enumerate}
+
+今回，本システムで利用するDockerコマンドについて表\ref{tab:docker_cmd}に示す．
+
+\begin{table}[htb]
+\centering
+\caption{Dockerコマンド一覧}
+\label{tab:docker_cmd}
+\begin{tabular}{|c|c|}  \hline
+    docker-compose up --build & コンテナのビルドと起動 \\ \hline
+    docker-compose down -v & docker-compose.yml で起動したコンテナの削除 \\ \hline
+    docker-compse exec [サービス名] [コマンド] & docker-compose.yml で起動したコンテナにログインして
+    コマンドを発行 \\ \hline		  
+\end{tabular}
+\end{table}
 
 \section{Python}\label{sec:python}
 
