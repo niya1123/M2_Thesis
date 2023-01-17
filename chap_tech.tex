@@ -31,13 +31,25 @@ Composeを使うには基本的に3つのステップを踏む．
 \label{tab:docker_cmd}
 \begin{tabular}{|c|c|}  \hline
     docker-compose up --build & コンテナのビルドと起動 \\ \hline
-    docker-compose down -v & docker-compose.yml で起動したコンテナの削除 \\ \hline
-    docker-compse exec [サービス名] [コマンド] & docker-compose.yml で起動したコンテナにログインして
-    コマンドを発行 \\ \hline		  
+    docker-compose down -v & 起動したコンテナの削除 \\ \hline
+    docker-compse exec [サービス名] [コマンド] & 起動したコンテナにログインしてコマンドを発行 \\ \hline		  
 \end{tabular}
 \end{table}
 
 \section{Python}\label{sec:python}
+Python\cite{python}はWindows，Linux/Unix，Mac OS X などの主要なオペレーティングシステムおよびJavaや.NETなどの仮想環境でも動作するインタプリタ形式の，対話的な，オブジェクト指向プログラミング言語である．
+この言語には，モジュール，例外，動的な型付け，超高水準の動的データ型，およびクラスが取り入れられている．
+Pythonはオブジェクト指向プログラミングを超えて，手続き型プログラミングや関数型プログラミングなど複数のプログラミングパラダイムをサポートしている．
+
+\subsection{Django}
+Django\cite{Django}は，Pythonで実装された無料オープンソースのWebアプリケーションフレームワークの一つである．
+Djangoが作られた時の目的として，複雑なデータベース主体のウェブサイトを簡単に構築するというものがある．
+これを実現するため，Djangoではコンポーネントの再利用性，素早い開発の原則に力を入れている．
+
+\subsection{Flask}
+Flask\cite{flask}は，Pythonで実装された軽量のWSGI\cite{wsgi}ウェブアプリケーションフレームワークです．
+Flaskはルーティング・リクエスト処理・blueprintモジュールの機能があります．
+Flask自体はこの3つの機能しかなく，拡張機能を個別に追加することで様々な機能を利用できる．
 
 \section{Neo4j}\label{sec:neo4j}
 
