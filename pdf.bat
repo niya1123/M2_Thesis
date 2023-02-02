@@ -1,9 +1,11 @@
-docker run --rm -v "%cd%:/workdir" paperist/alpine-texlive-ja platex %1.tex
-docker run --rm -v "%cd%:/workdir" paperist/alpine-texlive-ja pbibtex %1
-docker run --rm -v "%cd%:/workdir" paperist/alpine-texlive-ja platex %1.tex
-docker run --rm -v "%cd%:/workdir" paperist/alpine-texlive-ja platex %1.tex
-docker run --rm -v "%cd%:/workdir" paperist/alpine-texlive-ja platex %1.tex
-docker run --rm -v "%cd%:/workdir" paperist/alpine-texlive-ja dvipdfmx %1.dvi
+docker run -d -v "%cd%:/workdir" -w /workdir --name "latex" paperist/alpine-texlive-ja /bin/sh -c "while :; do sleep 10; done"
+docker exec -it latex apk add ghostscript
+docker exec -it latex platex thesis.tex
+docker exec -it latex pbibtex thesis
+docker exec -it latex platex thesis.tex
+docker exec -it latex platex thesis.tex
+docker exec -it latex platex thesis.tex
+docker exec -it latex dvipdfmx thesis.dvi
 del *.aux
 del *.dvi
 del *.log
